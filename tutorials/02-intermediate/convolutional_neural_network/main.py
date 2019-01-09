@@ -46,13 +46,14 @@ class ConvNet(nn.Module):
             nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2))
-        self.fc = nn.Linear(7*7*32, num_classes)
+        self.fc = nn.Linear(7*7*32, num_classes)  
         
     def forward(self, x):
-        out = self.layer1(x)
-        out = self.layer2(out)
-        out = out.reshape(out.size(0), -1)
-        out = self.fc(out)
+                                            # Data size, To start: 100*1*28*28. 
+        out = self.layer1(x)                # After layer 1: 100*16*14*14. 
+        out = self.layer2(out)              # After layer 2: 100*32*7*7. 
+        out = out.reshape(out.size(0), -1)  # After reshape: 100*(32*7*7). 
+        out = self.fc(out)                  # After fc: 100*10
         return out
 
 model = ConvNet(num_classes).to(device)

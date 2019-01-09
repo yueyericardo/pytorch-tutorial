@@ -55,12 +55,16 @@ criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)  
 
 # Train the model
-total_step = len(train_loader)
+total_step = len(train_loader) #600 where batch_size is 100, so there is total 60000 images in trainning data
+
 for epoch in range(num_epochs):
     for i, (images, labels) in enumerate(train_loader):  
         # Move tensors to the configured device
-        images = images.reshape(-1, 28*28).to(device)
+        # print(images.size())                        # before reshape: 100*1*28*28, after reshape: 100*784, every row is one image
+        images = images.reshape(-1, 28*28).to(device) # 100*784, where the weights have shape of 784*500 for layer 1, and output is 100*500, 
+                                                      # and weights for layer 2 is 500*10
         labels = labels.to(device)
+        print(i)
         
         # Forward pass
         outputs = model(images)
